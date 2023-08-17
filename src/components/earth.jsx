@@ -9,7 +9,8 @@ import { useLoader, useFrame } from '@react-three/fiber'
 import {SceneContext} from '../state/sceneState'
 
 function Earth(props) {
-  const { sceneState } = useContext(SceneContext)
+    const {position} = props
+    const { sceneState } = useContext(SceneContext)
     const earthBasicMap = useLoader(THREE.TextureLoader, earthImg)
     const earthBumpMap = useLoader(THREE.TextureLoader, earthBumpImg)
     const moonBasicMap = useLoader(THREE.TextureLoader, moonImg)
@@ -27,7 +28,11 @@ function Earth(props) {
     })
     
     return (
-      <group {...props} ref={meshGroup}>
+      <group 
+        {...props} 
+        position={[position, 0, 0]}
+        ref={meshGroup}
+      >
         <mesh
           ref={meshEarth}
         >

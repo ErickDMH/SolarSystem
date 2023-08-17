@@ -10,7 +10,7 @@ function SceneController() {
     }
 
    return  <div style={{position: 'absolute', zIndex: 10, bottom: '4rem', left: '46%'}}>
-         <i class={`fa fa-solid fa-${isPlaying ? 'stop' : 'play' }`} style={{fontSize: '3rem'}} onClick={togglePlay}/>
+         <i className={`fa fa-solid fa-${isPlaying ? 'stop' : 'play' }`} style={{fontSize: '3rem'}} onClick={togglePlay}/>
     </div>
 }
 export default SceneController
