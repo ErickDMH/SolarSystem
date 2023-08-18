@@ -32,7 +32,7 @@ function Planet(props) {
         >
 			<sphereGeometry args={[size, 16, 16]} />
 			<meshStandardMaterial 
-				color={color}
+				color={map ? undefined : color}
 				map={map}
 				bumpMap={bump} 
 			/>

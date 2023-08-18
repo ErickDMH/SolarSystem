@@ -9,13 +9,25 @@ import Planet from './planet'
 import mercuryBumpImg from  '../assets/mercury_bump.jpg'
 import mercuryImg from  '../assets/mercury.jpg'
 import venusImg from  '../assets/venus.jpg'
+import marsBumpImg from  '../assets/mars_bump.jpg'
+import marsImg from  '../assets/mars.jpg'
+import jupiterImg from  '../assets/jupiter.jpg'
+import saturnImg from  '../assets/saturn.jpg'
+import uranusImg from  '../assets/uranus.jpg'
+import neptuneImg from  '../assets/neptune.jpg'
+import plutoImg from  '../assets/pluto.jpg'
 import sunImg from  '../assets/sun.jpeg'
 
 const PLANETS = {
     'mercury': {color: 'gray', size: .5, position: 20, images: {bump: mercuryBumpImg, map: mercuryImg}},
     'venus': {color: 'white', size: .9, position: 30, images: {map: venusImg}},
     'earth': {render: props => <Earth {...props} />, size: 1, position: 40},
-    'mars': {color: 'red', size: .7, position: 50}
+    'mars': {color: 'red', size: .7, position: 50, images: {bump: marsBumpImg, map: marsImg}},
+    'jupiter': {color: 'brown', size: 2, position: 60, images: {map: jupiterImg}},
+    'saturn': {color: 'yellow', size: 1.8, position: 70, images: {map: saturnImg}},
+    'uranus': {color: 'cyan', size: 1.4, position: 80, images: {map: uranusImg}},
+    'neptune': {color: 'blue', size: 1.3, position: 90, images: {map: neptuneImg}},
+    'pluto': {color: 'brown', size: .2, position: 100, images: {map: plutoImg}},
 }
 
 function SolarSystem(props) {
