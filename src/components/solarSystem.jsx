@@ -56,6 +56,7 @@ function SolarSystem(props) {
         if(sceneState.isPlaying) {
             // Planet rotation from solar system center
             for ( let mesh of meshGroup.current.children) {
+                console.log('mesh---------------->', mesh)
                 const firstSelectedMesh = mesh.children[0]
                 let size, position_x  
                 if(firstSelectedMesh) {
