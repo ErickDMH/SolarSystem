@@ -28,24 +28,26 @@ function Earth(props) {
     })
     
     return (
-      <group 
-        {...props} 
-        position={[position, 0, 0]}
-        ref={meshGroup}
-      >
-        <mesh
-          ref={meshEarth}
+      <group position={[0, 0, 0]}>
+        <group 
+          {...props} 
+          position={[position, 0, 0]}
+          ref={meshGroup}
         >
-          <sphereGeometry args={[1, 24, 24]} />
-          <meshStandardMaterial color={earthBasicMap ? undefined : 'blue'} map={earthBasicMap} bumpMap={earthBumpMap} />
-        </mesh>
-        <mesh
-          position={[2, 0, 0]}
-          ref={meshMoon}
-        >
-          <sphereGeometry args={[.1, 8, 8]} />
-          <meshStandardMaterial color={moonBasicMap ? undefined : 'gray'} map={moonBasicMap} bumpMap={moonBumpMap} />
-        </mesh>
+          <mesh
+            ref={meshEarth}
+          >
+            <sphereGeometry args={[1, 24, 24]} />
+            <meshStandardMaterial color={earthBasicMap ? undefined : 'blue'} map={earthBasicMap} bumpMap={earthBumpMap} />
+          </mesh>
+          <mesh
+            position={[2, 0, 0]}
+            ref={meshMoon}
+          >
+            <sphereGeometry args={[.1, 8, 8]} />
+            <meshStandardMaterial color={moonBasicMap ? undefined : 'gray'} map={moonBasicMap} bumpMap={moonBumpMap} />
+          </mesh>
+        </group>
       </group>
     )
   }

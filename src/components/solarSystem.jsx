@@ -1,4 +1,4 @@
-import { useRef, useContext } from 'react'
+import { useRef, useContext, useCallback } from 'react'
 import * as THREE from 'three'
 import { useLoader, useFrame } from '@react-three/fiber'
 
@@ -30,16 +30,79 @@ const PLANETS = {
     'pluto': {color: 'brown', size: .2, position: 100, images: {map: plutoImg}},
 }
 
+
 function SolarSystem(props) {
-    const { sceneState } = useContext(SceneContext)
+    const { sceneState, updateSceneState  } = useContext(SceneContext)
     const sunBasicMap = useLoader(THREE.TextureLoader, sunImg)
 
     const meshSun = useRef()
     const meshGroup = useRef()
     
+    const handleClickZoom = useCallback(
+        (e) => {
+            e.stopPropagation()
+            console.log('e---------------->', e)
+            console.log('e.object.position---------------->', e.object.position)
+            console.log('e.camera.position---------------->', e.camera.position)
+            const distance = e.object.position.distanceTo(e.camera.position)
+            updateSceneState({targetObj: e.object, distanceTarget: distance})
+        },
+      [updateSceneState],
+    )
+
+    console.log('distanceTarget---------------->', sceneState.distanceTarget)
+
     useFrame((state, delta) => {
         if(sceneState.isPlaying) {
-            meshGroup.current.rotation.y += delta
+            // Planet rotation from solar system center
+            for ( let mesh of meshGroup.current.children) {
+                const firstSelectedMesh = mesh.children[0]
+                let size, position_x  
+                if(firstSelectedMesh) {
+                    if(firstSelectedMesh.constructor.name === 'Mesh') {
+                        size = firstSelectedMesh.geometry.parameters.radius
+                        position_x = firstSelectedMesh.position.x
+                    } else if(firstSelectedMesh.constructor.name === 'Group') {
+                        size = firstSelectedMesh.children[0].geometry.parameters.radius
+                        position_x = firstSelectedMesh.position.x
+                    }
+                    const vel = (delta * 20)/ (position_x / size)
+                    mesh.rotation.y += (vel)
+                }
+            }
+        }
+        if(sceneState.targetObj) {
+            state.camera.lookAt(sceneState.targetObj?.position)
+        }
+        if(sceneState.targetObj && sceneState.distanceTarget > 10) {
+            console.log('targetObj---------------->', sceneState?.targetObj)
+
+            // state.camera.lookAt(sceneState.targetObj.position)
+            // state.camera.position.lerp(sceneState.targetObj.position, .03)
+            // state.camera.updateProjectionMatrix()
+            if (sceneState.targetObj?.position) {
+                state.camera.position.x = THREE.MathUtils.damp(
+                    state.camera.position.x,
+                    sceneState.targetObj.position.x,
+                    1,
+                    0.7
+                )
+                state.camera.position.y = THREE.MathUtils.damp(
+                    state.camera.position.y,
+                    sceneState.targetObj.position.y,
+                    1,
+                    0.7
+                )
+                state.camera.position.z = THREE.MathUtils.damp(
+                    state.camera.position.z,
+                    sceneState.targetObj.position.z,
+                    1,
+                    0.7
+                )
+
+                const distance = sceneState.targetObj.position.distanceTo(state.camera.position)
+                sceneState.distanceTarget = distance
+            }
         }
     })
 
@@ -47,6 +110,7 @@ function SolarSystem(props) {
         <group {...props} ref={meshGroup}>
             <mesh
                 ref={meshSun}
+                onClick={handleClickZoom}
             >
                 <sphereGeometry args={[10, 16, 16]} />
                 <meshStandardMaterial color={sunBasicMap ? undefined : 'yellow'} map={sunBasicMap} />
@@ -55,10 +119,10 @@ function SolarSystem(props) {
                 Object.entries(PLANETS).map((value) => {
                     if (value[1].render) {
                         const { render, ...props} = value[1]
-                        return render(props)
+                        return render({...props, key: value[0], onClick: handleClickZoom})
                     } else {
                         const props = value[1]
-                        return <Planet key={value[0]} {...props} />
+                        return <Planet key={value[0]} onClick={handleClickZoom} {...props} />
                     }
                 })
             }

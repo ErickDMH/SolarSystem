@@ -2,6 +2,9 @@ import React, {useReducer} from 'react'
 
  const initial = {
     isPlaying: true,
+    targetObj: null,
+    distanceTarget: 0,
+    animating: false
 }
 
 export const SceneContext = React.createContext(initial)
