@@ -60,7 +60,7 @@ function SolarSystem(props) {
                 const firstSelectedMesh = mesh.children[0]
                 let size, position_x  
                 if(firstSelectedMesh) {
-                    if(firstSelectedMesh.constructor.name === 'Mesh') {
+                    if((firstSelectedMesh.type ?? firstSelectedMesh.constructor.name) === 'Mesh') {
                         size = firstSelectedMesh.geometry.parameters.radius
                         position_x = firstSelectedMesh.position.x
                     } else if(firstSelectedMesh.constructor.name === 'Group') {
